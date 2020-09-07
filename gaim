@@ -14,28 +14,9 @@ if [ $# -ge 1 ]; then
   elif [ $1 = "init" ]; then
     git checkout working
     code --install-extension ./.ucf/gaim.vsix
-    code --uninstall-extension 
+    code --uninstall-extension zeitnergmbh.auto-git >/dev/null
     echo "Extension installed and current branch is now \"working\". Restart VS Code to begin."
     exit 0
-  elif [ $1 = "--reset-student" ]; then
-    ./gaim --reset-repo
-    output=`curl -s -X DELETE -o /dev/null  https://plato.mrl.ai:8081/git/student/$repository`
-    echo $output
-    exit 0
-  elif [ $1 = "--reset-repo" ]; then
-    echo "Resetting repository..."
-    template_url=`.ucf/class --template`
-    git remote add template $template_url
-    git fetch template
-    git stash
-    git checkout master
-    git branch -D working
-    git push -d origin working
-    git reset --hard template/master
-    git push --force
-    rm .ucf/.repo
-    output=`curl -s -X DELETE -o /dev/null  https://plato.mrl.ai:8081/git/repo/$repository`
-    echo $output
   elif [ ! -f ".ucf/.secret" -a $1 != 'register' -a $1 != 'reset' ]; then
     echo "This directory has not been set up yet."
     echo ""
